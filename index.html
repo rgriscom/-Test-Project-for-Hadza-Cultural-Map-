@@ -45,6 +45,9 @@
     .setLngLat(feature.geometry.coordinates)
     .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>' + '<p>' + feature.properties.image + '</p>')
     .addTo(map);
+  map.on('mouseleave', 'hadza-cultural-map', function() {
+    popup.remove();
+  });
 });
     </script>
   </body>
