@@ -30,22 +30,41 @@
       center: [35.10535, -3.71277],
       zoom: 9.16
     });
-    map.on('click', function(e) {
-  var features = map.queryRenderedFeatures(e.point, {
-    layers: ['hadza-cultural-map'] // replace this with the name of the layer
+   var popup = new mapboxgl.Popup({
+        offset: [0, -7],
+        closeButton: false,
+        closeOnClick: false
+      });
+
+  map.on('load', function() {
+    map.on('mouseenter', 'hadza-cultural-map', function(e) {
+      map.getCanvas().style.cursor = 'pointer';
+
+      var coordinates = e.features[0].geometry.coordinates.slice();
+      var title = e.features[0].properties.title;
+      var description = e.features[0].properties.description;
+      var image = e.features[0].properties.image;
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup
+      .setLngLat(coordinates)
+      .setHTML('<h3>' + title + '</h3><p>' + description + '</p><p>' + image + '</p>)
+      .addTo(map);
+      });
+
+    map.on('mouseleave', 'hadza-cultural-map', function() {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+    });
   });
-
-  if (!features.length) {
-    return;
-  }
-
-  var feature = features[0];
-
-  var popup = new mapboxgl.Popup({ offset: [0, -15] })
-    .setLngLat(feature.geometry.coordinates)
-    .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>' + '<p>' + feature.properties.image + '</p>')
-    .addTo(map);
-});
     </script>
   </body>
 </html>
