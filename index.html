@@ -30,7 +30,7 @@
       center: [35.10535, -3.71277],
       zoom: 9.16
     });
-    map.on('click', function(e) {
+    map.on('mouseenter', function(e) {
   var features = map.queryRenderedFeatures(e.point, {
     layers: ['hadza-cultural-map'] // replace this with the name of the layer
   });
