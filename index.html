@@ -43,10 +43,9 @@
 
   var popup = new mapboxgl.Popup({ offset: [0, -15] })
     .setLngLat(feature.geometry.coordinates)
-  if (feature.properties.image){
+  if (typeof feature.properties.image !== 'undefined'){
     .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>' + '<p>' + feature.properties.image + '</p>')
-  }
-  if (!feature.properties.image){
+  } else {
     .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
   }
     .addTo(map);
